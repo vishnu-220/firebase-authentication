@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase.js"></script>
+        <script>
+        // Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyDaG95KLR1taItEfrRcPL_qJs-3xv0LwMg",
+                authDomain: "node-9315d.firebaseapp.com",
+                databaseURL: "https://node-9315d.firebaseio.com",
+                projectId: "node-9315d",
+                storageBucket: "node-9315d.appspot.com",
+                messagingSenderId: "960641802092"
+            };
+            firebase.initializeApp(config);
+        </script>
+        <script>
+                window.fbAsyncInit = function() {
+                   FB.init ({
+                      appId      : '164654300848247',
+                      xfbml      : true,
+                      version    : 'v2.6'
+                   });
+                };
+             
+                (function(d, s, id) {
+                   var js, fjs = d.getElementsByTagName(s)[0];
+                   if (d.getElementById(id)) {return;}
+                   js = d.createElement(s); js.id = id;
+                   js.src = "//connect.facebook.net/en_US/sdk.js";
+                   fjs.parentNode.insertBefore(js, fjs);
+                } (document, 'script', 'facebook-jssdk'));
+                 
+        </script>
+        <script type="text/javascript">
+             /**
+             * Handles the Google signIn process.
+             */
+            function toggleGoogleSignIn() {
+                var provider = new firebase.auth.GoogleAuthProvider();
+                // alert("Google signin");
+                if (firebase.auth().currentUser) {
+                // [START signout]
+                firebase.auth().signOut();
+                document.getElementById('quickstart-googleSignIn').textContent = "Google SignIn"
+                document.getElementById('quickstart-fbSignIn').textContent = "Facebook SignIn"
+                document.getElementById('quickstart-twitterSignIn').textContent = "Twitter SignIn"
+                document.getElementById('quickstart-gitSignIn').textContent = "GitHub SignIn"
+                // [END signout]
+                } else {
+                    firebase.auth().signInWithPopup(provider).then(function(result) {
+                        document.getElementById('quickstart-googleSignIn').textContent = "Google SignOut"
+                        var token = result.credential.accessToken;
+                        var user = result.user;   
+                        console.log(token);
+                        console.log(user);
+                    }).catch(function(error) {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;      
+                        console.log(error.code);
+                        console.log(error.message);
+                    });
+                }
+            }
+            /**
+             * Handles the sign in button press.
+             */
+            function toggleSignIn() {
+                // alert("Normal signin");
+                if (firebase.auth().currentUser) {
+                    // [START signout]
+                    firebase.auth().signOut();
+                    document.getElementById('quickstart-googleSignIn').textContent = "Google SignIn"
+                    document.getElementById('quickstart-fbSignIn').textContent = "Facebook SignIn"
+                    document.getElementById('quickstart-twitterSignIn').textContent = "Twitter SignIn"
+                    document.getElementById('quickstart-gitSignIn').textContent = "GitHub SignIn"
+                    // [END signout]
+                } else {
+                    var email = document.getElementById('email').value;
+                    var password = document.getElementById('password').value;
+                    if (email.length < 4) {
+                        alert('Please enter an email address.');
+                        return;
+                    }
+                    if (password.length < 4) {
+                        alert('Please enter a password.');
+                        return;
+                    }
+                    // Sign in with email and pass.
+                    // [START authwithemail]
+                    firebase.auth().signInWithEmailAndPassword(email, password).catch(function(error) {
+                    // Handle Errors here.
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        // [START_EXCLUDE]
+                        if (errorCode === 'auth/wrong-password') {
+                            alert('Wrong password.');
+                        } else {
+                            alert(errorMessage);
+                        }
+                        console.log(error);
+                        document.getElementById('quickstart-sign-in').disabled = false;
+                        document.getElementById('quickstart-sign-in').style.backgroundColor = "#0d47a1";
+                        // [END_EXCLUDE]
+                    });
+                    // [END authwithemail]
+                }
+                document.getElementById('quickstart-sign-in').disabled = true;
+                document.getElementById('quickstart-sign-in').style.backgroundColor = "grey";
+            }
+
+             /**
+             * Handles the Facebook signIn process.
+             */
+            function toggleFacebookSignIn() {
+                var provider = new firebase.auth.FacebookAuthProvider();
+                // alert("Facebook signin");
+                if (firebase.auth().currentUser) {
+                // [START signout]
+                firebase.auth().signOut();
+                document.getElementById('quickstart-googleSignIn').textContent = "Google SignIn"
+                document.getElementById('quickstart-fbSignIn').textContent = "Facebook SignIn"
+                document.getElementById('quickstart-twitterSignIn').textContent = "Twitter SignIn"
+                document.getElementById('quickstart-gitSignIn').textContent = "GitHub SignIn"
+                 //[END signout]
+                } else {
+                    firebase.auth().signInWithPopup(provider).then(function(result) {
+                        document.getElementById('quickstart-fbSignIn').textContent = "Facebook SignOut"
+                        var token = result.credential.accessToken;
+                        var user = result.user;         
+                        console.log(token)
+                        console.log(user)
+                    }).catch(function(error) {
+                        console.log(error.code);
+                        console.log(error.message);
+                    });
+                }
+            }
+            
+             /**
+             * Handles the Twitter signIn process.
+             */
+            function toggleTwitterSignIn() {
+                var provider = new firebase.auth.TwitterAuthProvider();
+                if (firebase.auth().currentUser) {
+                // [START signout]
+                firebase.auth().signOut();
+                document.getElementById('quickstart-googleSignIn').textContent = "Google SignIn"
+                document.getElementById('quickstart-fbSignIn').textContent = "Facebook SignIn"
+                document.getElementById('quickstart-twitterSignIn').textContent = "Twitter SignIn"
+                document.getElementById('quickstart-gitSignIn').textContent = "GitHub SignIn"
+                 //[END signout]
+                } else {
+                    firebase.auth().signInWithPopup(provider).then(function(result) {
+                            document.getElementById('quickstart-twitterSignIn').textContent = "Twitter SignOut"
+                            var token = result.credential.accessToken;
+                            var user = result.user;        
+                            console.log(token)
+                            console.log(user)
+                        }).catch(function(error) {
+                            console.log(error.code)
+                            console.log(error.message)
+                        });
+                }
+            }
+
+            /**
+             * Handles the Github signIn process.
+             */
+            function toggleGitSignIn() {
+                var provider = new firebase.auth.GithubAuthProvider();
+                if (firebase.auth().currentUser) {
+                // [START signout]
+                firebase.auth().signOut();
+                document.getElementById('quickstart-googleSignIn').textContent = "Google SignIn"
+                document.getElementById('quickstart-fbSignIn').textContent = "Facebook SignIn"
+                document.getElementById('quickstart-twitterSignIn').textContent = "Twitter SignIn"
+                document.getElementById('quickstart-gitSignIn').textContent = "GitHub SignIn"
+                 //[END signout]
+                } else {
+                    firebase.auth().signInWithPopup(provider).then(function(result) {
+                            document.getElementById('quickstart-gitSignIn').textContent = "GitHub SignOut"
+                            var token = result.credential.accessToken;
+                            var user = result.user;        
+                            console.log(token)
+                            console.log(user)
+                        }).catch(function(error) {
+                            console.log(error.code)
+                            console.log(error.email);
+                            console.log(error.message)
+                        });
+                }
+            }
+
+            function anonymousSignIn() {
+                firebase.auth().signInAnonymously().then(function() {
+                    console.log('Logged in as Anonymous!') 
+                    }).catch(function(error) {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.log(errorCode);
+                    console.log(errorMessage);
+                });
+            }
+           
+            /**
+             * Handles the sign up button press.
+             */
+            function handleSignUp() {
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            if (email.length < 4) {
+                alert('Please enter an email address.');
+                return;
+            }
+            if (password.length < 4) {
+                alert('Please enter a password.');
+                return;
+            }
+            // Sign in with email and pass.
+            // [START createwithemail]
+            firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                // [START_EXCLUDE]
+                if (errorCode == 'auth/weak-password') {
+                alert('The password is too weak.');
+                } else {
+                alert(errorMessage);
+                }
+                console.log(error);
+                // [END_EXCLUDE]
+            });
+            // [END createwithemail]
+            }
+
+            /**
+             * Sends an email verification to the user.
+             */
+            function sendEmailVerification() {
+                // [START sendemailverification]
+                firebase.auth().currentUser.sendEmailVerification().then(function() {
+                    // Email Verification sent!
+                    // [START_EXCLUDE]
+                    alert('Email Verification Sent!');
+                    // [END_EXCLUDE]
+                });
+                // [END sendemailverification]
+            }
+
+            function sendPasswordReset() {
+                var email = document.getElementById('email').value;
+                // [START sendpasswordemail]
+                firebase.auth().sendPasswordResetEmail(email).then(function() {
+                    // Password Reset Email Sent!
+                    // [START_EXCLUDE]
+                    alert('Password Reset Email Sent!');
+                    // [END_EXCLUDE]
+                }).catch(function(error) {
+                    // Handle Errors here.
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    // [START_EXCLUDE]
+                    if (errorCode == 'auth/invalid-email') {
+                    alert(errorMessage);
+                    } else if (errorCode == 'auth/user-not-found') {
+                    alert(errorMessage);
+                    }
+                    console.log(error);
+                    // [END_EXCLUDE]
+                });
+                // [END sendpasswordemail];
+            }
+
+            /**
+             * To get the token of the currently logged in user.
+             */
+            function getuser() {
+                var user = firebase.auth().currentUser ;
+                // console.log("user",user);
+                if(user!=null) {
+                    firebase.auth().currentUser.getIdToken().then(function(idToken) {
+                        console.log("Token ID",idToken);
+                        alert(idToken);
+                        }).catch(function(error) {
+                            console.log(error);
+                            alert(error);
+                    });
+                }
+                else {
+                    alert("No user logged in");
+                }
+            }
+            
+            /**
+             * initApp handles setting up UI event listeners and registering Firebase auth listeners:
+             *  - firebase.auth().onAuthStateChanged: This listener is called when the user is signed in or
+             *    out, and that is where we update the UI.
+             */
+            function initApp() {
+            // Listening for auth state changes.
+            // [START authstatelistener]
+            firebase.auth().onAuthStateChanged(function(user) {
+                // alert(user);
+                console.log(user);
+                // [START_EXCLUDE silent]
+                document.getElementById('quickstart-verify-email').disabled = true;
+                document.getElementById('quickstart-verify-email').style.backgroundColor = "grey";
+                // [END_EXCLUDE]
+                if (user) {
+                // User is signed in.
+                var displayName = user.displayName;
+                var email = user.email;
+                var emailVerified = user.emailVerified;
+                var photoURL = user.photoURL;
+                var isAnonymous = user.isAnonymous;
+                var uid = user.uid;
+                var providerData = user.providerData;
+                // [START_EXCLUDE]
+                document.getElementById('quickstart-sign-in-status').textContent = 'Signed in';
+                document.getElementById('quickstart-sign-in').textContent = 'Sign out';
+                document.getElementById('quickstart-getUserId').style.backgroundColor = "#0d47a1";
+                document.getElementById('quickstart-getUserId').disabled = false;
+                var display = {
+                    uid:user.uid,
+                    displayName:user.displayName,
+                    photoURL:user.photoURL,
+                    email:user.email,
+                    emailVerified:user.emailVerified,
+                    phoneNumber : user.phoneNumber,
+                    isAnonymous:user.isAnonymous,
+                    refreshToken:user.refreshToken
+                };
+                document.getElementById('quickstart-account-details').textContent = JSON.stringify(display, null, '  ');
+                if (!emailVerified) {
+                    document.getElementById('quickstart-verify-email').disabled = false;
+                    document.getElementById('quickstart-verify-email').style.backgroundColor = "#0d47a1";
+                }
+                // [END_EXCLUDE]
+                } else {
+                // User is signed out.
+                // [START_EXCLUDE]
+                document.getElementById('quickstart-sign-in-status').textContent = 'Signed out';
+                document.getElementById('quickstart-sign-in').textContent = 'Sign in';
+                document.getElementById('quickstart-account-details').textContent = 'null';
+                document.getElementById('quickstart-getUserId').style.backgroundColor = "grey";
+                document.getElementById('quickstart-getUserId').disabled = true;
+                // [END_EXCLUDE]
+                }
+                // [START_EXCLUDE silent]
+                document.getElementById('quickstart-sign-in').disabled = false;
+                document.getElementById('quickstart-sign-in').style.backgroundColor = "#0d47a1";
+                // [END_EXCLUDE]
+            });
+            // [END authstatelistener]
+
+            document.getElementById('quickstart-sign-in').addEventListener('click', toggleSignIn, false);
+            document.getElementById('quickstart-sign-up').addEventListener('click', handleSignUp, false);
+            document.getElementById('quickstart-verify-email').addEventListener('click', sendEmailVerification, false);
+            document.getElementById('quickstart-password-reset').addEventListener('click', sendPasswordReset, false);
+            document.getElementById('quickstart-getUserId').addEventListener('click',getuser , false);
+            document.getElementById('quickstart-googleSignIn').addEventListener('click',toggleGoogleSignIn, false);
+            document.getElementById('quickstart-fbSignIn').addEventListener('click',toggleFacebookSignIn,false);
+            document.getElementById('quickstart-twitterSignIn').addEventListener('click',toggleTwitterSignIn,false);
+            document.getElementById('quickstart-gitSignIn').addEventListener('click',toggleGitSignIn,false);
+            document.getElementById('quickstart-anonysignIn').addEventListener('click',anonymousSignIn,false);
+        }
+            window.onload = function() {
+            initApp();
+            };
+        </script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <title>Firebase authentication</title>
+        <style>
+        #header {
+            background-color: #0d47a1 ;
+            display: table;
+            padding: 0.5em;
+            padding-right:1em;
+            border-top-right-radius: 7px;
+            border-bottom-right-radius: 7px;
+            margin-top: 1em; 
+        }
+        #header h3 {
+            font-family: "Roboto" ;
+            color: white;
+            margin: 0;
+            margin-left: 1em;
+        }
+        #form-container {
+            /* color: #1a237e; */
+            display:block;
+            width:90%;
+            padding:2em;
+            margin: 2em auto;
+            background:#fff;
+            box-shadow: 8px 8px 16px 8px rgba(0,0,0,0.2);
+        }
+        #form-container:hover {
+            box-shadow: 8px 16px 24px 8px rgba(0,0,0,0.2);
+        }
+        #form-container input {
+            border-radius: 3px;
+            border:1px solid #0d47a1;
+            outline:none;
+            width: 100%;
+            padding: 0.5em;
+            box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+        }
+        #form-container input:focus {
+            border: 1px solid white;
+        }
+        #form-container button {
+            background-color: #0d47a1;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            outline: none;
+            box-shadow: 5px 5px 5px rgba(0,0,0,0.2);
+            padding: 0.5em;
+            border-radius: 5px;
+            transition-duration: 0.3s;
+            /* margin-right: 5px;
+            margin-left: 5px; */
+        }
+        #button-list {
+            display: block;
+            list-style-type: none;
+            width: 100%;
+        }
+        #button-list li {
+            display: inline;
+        }
+        #quickstart-anonysignIn {
+                margin-top: 1em;
+            }
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        @media only screen and (max-width: 950px) {
+            #form-container button {
+                width: 35%;
+                margin-bottom: 0.5em;
+                height: 80px;
+            }
+            #header h3 {
+                font-size: 6vw;
+            }
+            #quickstart-anonysignIn {
+                margin-top: 0;
+            }
+            #quickstart-sign-in ,#quickstart-verify-email,#quickstart-getUserId,#quickstart-fbSignIn,#quickstart-gitSignIn{
+                margin-left: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="header">
+        <h3><i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;Firebase authentication</h3>
+    </div>
+    <div id="form-container">
+        <label><i class="fa fa-user" aria-hidden="true"></i>&nbsp;Username</label><br>
+            <input type="text" name="email" id="email" placeholder="Email"/>
+        <br><br>
+        <label><i class="fa fa-key" aria-hidden="true"></i>&nbsp;Password</label><br>
+            <input type="password" name="password" id="password" placeholder="Password" autocomplete="off"/>
+        <br><br>
+            <button disabled id="quickstart-sign-in" name="signin">Sign In</button>
+            
+            <button id="quickstart-sign-up" name="signup">Sign Up</button>
+           
+            <button disabled id="quickstart-verify-email" name="verify-email">Verify Email</button>
+            
+            <button id="quickstart-password-reset" name="verify-email">Reset Password</button>
+            
+            <button id="quickstart-getUserId" name="getUserId">Get User Token</button>
+            
+            <button id="quickstart-googleSignIn" name="googleSignIn">Google SignIn</button>
+            
+            <button id="quickstart-fbSignIn" name="fbSignIn">Facebook SignIn</button>
+            
+            <button id="quickstart-twitterSignIn" name="twitterSignIn"> Twitter SignIn</button>
+            
+            <button id="quickstart-gitSignIn" name="gitSignIn">GitHub SignIn</button>
+            
+            <button id="quickstart-anonysignIn" name="anonysignIn">Anonymous SignIn</button>
+        <br><br>
+        <div class="user-details-container"> 
+            Firebase sign-in status: <span id="quickstart-sign-in-status">Unknown</span>
+            <div>Firebase auth <code>currentUser</code> object value:</div>
+            <pre><code id="quickstart-account-details">null</code></pre>
+        </div>
+    </div>
+</body>
+</html>
